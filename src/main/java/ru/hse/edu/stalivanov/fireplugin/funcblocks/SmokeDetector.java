@@ -1,22 +1,31 @@
 package ru.hse.edu.stalivanov.fireplugin.funcblocks;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.World;
-import ru.hse.edu.stalivanov.fireplugin.PluginMain;
-import ru.hse.edu.stalivanov.fireplugin.SystemObjects;
+
+import java.io.Serial;
 
 public class SmokeDetector implements SerializableID
 {
+    @Serial
+    private static final long serialVersionUID = 1;
+
     private int x, y, z, x1, z1, x2, z2;
+    private transient Position position;
     private int system, group, id;
     private String worldName;
     private transient Util util;
-    private transient SystemObjects collector = PluginMain.getSystemObjects();
 
+    @Override
     public void load()
     {
         util = new Util(worldName);
+        position = new Position(x, y, z);
+    }
+
+    @Override
+    public Position getPosition()
+    {
+        return position;
     }
 
     public boolean isFire()
@@ -31,29 +40,28 @@ public class SmokeDetector implements SerializableID
     }
 
     @Override
-    public void remove()
+    public int getGroup()
     {
-
+        return group;
     }
 
-    private class Util
+    @Override
+    public int getSystem()
     {
-        private World world;
+        return system;
+    }
 
+    @Override
+    public ObjectTypes getType()
+    {
+        return ObjectTypes.smokeDetector;
+    }
+
+    private class Util extends UtilBase
+    {
         public Util(String worldName)
         {
-            world = Bukkit.getWorld(worldName);
-        }
-        
-        public boolean checkCorrect()
-        {
-            var material = world.getBlockAt(x, y, z).getType();
-            if(material != Material.QUARTZ_BLOCK)
-            {
-                collector.removeSmokeDetector(system, group, id);
-                return false;
-            }
-            return true;
+            super(worldName, x, y, z, false, Material.QUARTZ_BLOCK);
         }
 
         private boolean isFireAtPos(int xm, int zm)

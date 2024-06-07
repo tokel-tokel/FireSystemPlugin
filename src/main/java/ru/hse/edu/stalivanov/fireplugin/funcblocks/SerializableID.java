@@ -7,8 +7,14 @@ import java.io.Serializable;
 public interface SerializableID extends Serializable, Comparable<SerializableID>
 {
     int getID();
+    int getGroup();
+    int getSystem();
 
-    void remove();
+    ObjectTypes getType();
+
+    void load();
+
+    Position getPosition();
 
     @Override
     default int compareTo(@NotNull SerializableID o)
