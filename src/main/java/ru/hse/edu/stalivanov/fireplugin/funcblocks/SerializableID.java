@@ -7,8 +7,6 @@ import java.io.Serializable;
 public interface SerializableID extends Serializable, Comparable<SerializableID>
 {
     int getID();
-    int getGroup();
-    int getSystem();
 
     ObjectTypes getType();
 

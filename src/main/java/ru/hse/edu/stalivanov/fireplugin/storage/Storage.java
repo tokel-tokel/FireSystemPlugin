@@ -12,114 +12,69 @@ public class Storage implements Serializable
     @Serial
     private static final long serialVersionUID = 1;
 
-    private Systems systems;
+    private Types types;
     private Positions positions;
+
+    public Storage()
+    {
+        types = new Types();
+        positions = new Positions();
+    }
 
     public boolean addElement(SerializableID element)
     {
-        if(!systems.addElement(element))
+        if(!types.addElement(element))
             return false;
         positions.add(element);
         return true;
     }
 
-    public boolean removeElement(Position pos)
+    private boolean removeElement(SerializableID el)
     {
-        var el = positions.get(pos);
         if(el == null)
             return false;
-        positions.remove(pos);
-        systems.removeElement(el.getSystem(), el.getGroup(), el.getType(), el.getID());
-        return true;
-    }
-
-    public boolean removeElement(int system, int group, ObjectTypes type, int id)
-    {
-        var el = systems.getElement(system, group, type, id);
-        if(el == null)
-            return false;
-        systems.removeElement(system, group, type, id);
+        types.removeElement(el.getType(), el.getID());
         positions.remove(el.getPosition());
         return true;
     }
 
-    public SerializableID getElement(Position pos)
+    public boolean removeElement(ObjectTypes type, int id)
     {
-        return positions.get(pos);
+        return removeElement(types.getElement(type, id));
     }
 
-    public SerializableID getElement(int system, int group, ObjectTypes type, int id)
+    public boolean removeElement(Position position)
     {
-        return systems.getElement(system, group, type, id);
+        return removeElement(positions.get(position));
     }
 
-    public int getFreeSystem()
+    public SerializableID getElement(ObjectTypes type, int id)
     {
-        return systems.getFreeSystem();
+        return types.getElement(type, id);
     }
 
-    public int getFreeGroup(int system)
+    public SerializableID getElement(Position position)
     {
-        return systems.getFreeGroup(system);
-    }
-
-    public int getFreeId(int system, int group, ObjectTypes type)
-    {
-        return systems.getFreeId(system, group, type);
+        return positions.get(position);
     }
 
     public Iterable<SerializableID> getAll()
     {
-        return systems.getAll();
+        return types.getAll();
     }
 
-    public boolean checkSystem(int system)
+    public Iterable<SerializableID> getAllType(ObjectTypes type)
     {
-        return systems.checkSystem(system);
+        return types.getElements(type).getAll();
     }
 
-    public boolean checkGroup(int system, int group)
+    public int getFreeId(ObjectTypes type)
     {
-        return systems.checkGroup(system, group);
+        return types.getFreeId(type);
     }
 
-    public boolean checkId(int system, int group, ObjectTypes type, int id)
+    public boolean checkId(ObjectTypes type, int id)
     {
-        return systems.checkId(system, group, type, id);
-    }
-
-    public boolean removeGroup(int system, int group)
-    {
-        return systems.removeGroup(system, group);
-    }
-
-    public boolean removeSystem(int system)
-    {
-        return systems.removeSystem(system);
-    }
-
-    public Iterable<SerializableID> getAllSystem(int system)
-    {
-        return systems.getAllSystem(system);
-    }
-
-    public Iterable<SerializableID> getAllGroup(int system, int group)
-    {
-        return systems.getAllGroup(system, group);
-    }
-
-    public Iterable<SerializableID> getAllGroupType(int system, int group, ObjectTypes type)
-    {
-        return systems.getAllGroupType(system, group, type);
-    }
-
-    public Iterable<SerializableID> getAllSysElements(int system)
-    {
-        return systems.getAllSysElements(system);
-    }
-
-    public Iterable<SerializableID> getAllSysType(int system, ObjectTypes type)
-    {
-        return systems.getAllSysType(system, type);
+        return types.checkId(type, id);
     }
 }

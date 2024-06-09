@@ -1,5 +1,6 @@
 package ru.hse.edu.stalivanov.fireplugin.funcblocks;
 
+import org.bukkit.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serial;
@@ -17,6 +18,11 @@ public class Position implements Comparable<Position>, Serializable
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public Position(Block block)
+    {
+        this(block.getX(), block.getY(), block.getZ());
     }
 
     @Override

@@ -6,7 +6,7 @@ public interface Util
 {
     static int getFreeInSet(NavigableSet<Integer> set)
     {
-        if(set.first() == null)
+        if(set.isEmpty())
             return 1;
         int first = set.first();
         Integer second = set.higher(first);

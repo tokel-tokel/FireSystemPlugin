@@ -14,6 +14,13 @@ public class Types implements GetAll, AddElement, Serializable
 
     private HashMap<ObjectTypes, Elements> elementsMap;
 
+    public Types()
+    {
+        elementsMap = new HashMap<>();
+        for(var t : ObjectTypes.values())
+            elementsMap.put(t, new Elements());
+    }
+
     @Override
     public Iterable<SerializableID> getAll()
     {
@@ -39,5 +46,15 @@ public class Types implements GetAll, AddElement, Serializable
     public Elements getElements(ObjectTypes type)
     {
         return elementsMap.get(type);
+    }
+
+    public int getFreeId(ObjectTypes type)
+    {
+        return elementsMap.get(type).getFreeId();
+    }
+
+    public boolean checkId(ObjectTypes type, int id)
+    {
+        return elementsMap.get(type).checkId(id);
     }
 }

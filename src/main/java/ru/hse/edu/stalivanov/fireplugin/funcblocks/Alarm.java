@@ -1,10 +1,13 @@
 package ru.hse.edu.stalivanov.fireplugin.funcblocks;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Switch;
 
 import java.io.Serial;
+import java.util.Objects;
 
 public class Alarm implements SerializableID
 {
@@ -13,9 +16,15 @@ public class Alarm implements SerializableID
 
     private int x, y, z;
     private transient Position position;
-    private int system, id;
-    private String worldName;
+    private int id;
+    private String worldName = "world";
     private transient Util util;
+
+    public Alarm(int id, int x, int y, int z)
+    {
+        this.id = id; this.x = x; this.y = y; this.z = z;
+        load();
+    }
 
     @Override
     public int getID()
@@ -24,23 +33,10 @@ public class Alarm implements SerializableID
     }
 
     @Override
-    public int getGroup()
-    {
-        return 0;
-    }
-
-    @Override
-    public int getSystem()
-    {
-        return system;
-    }
-
-    @Override
     public ObjectTypes getType()
     {
         return ObjectTypes.alarm;
     }
-
 
     @Override
     public void load()
@@ -53,6 +49,11 @@ public class Alarm implements SerializableID
     public Position getPosition()
     {
         return position;
+    }
+
+    public void turnOn()
+    {
+        util.turnOn();
     }
 
     private class Util extends UtilBase
@@ -68,6 +69,13 @@ public class Alarm implements SerializableID
             if(bd instanceof Switch)
                 return (Switch) bd;
             return null;
+        }
+
+        public void turnOn()
+        {
+            Switch sw = getSwitch();
+            sw.setPowered(true);
+            getBlock().setBlockData(sw);
         }
     }
 }

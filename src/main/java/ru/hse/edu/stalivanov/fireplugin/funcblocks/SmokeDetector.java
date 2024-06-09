@@ -11,15 +11,27 @@ public class SmokeDetector implements SerializableID
 
     private int x, y, z, x1, z1, x2, z2;
     private transient Position position;
-    private int system, group, id;
-    private String worldName;
+    private int id;
+    private String worldName = "world";
     private transient Util util;
+
+    public SmokeDetector(int id, int x, int y, int z, int x1, int z1, int x2, int z2)
+    {
+        this.x = x; this.y = y; this.z = z; this.x1 = x1; this.z1 = z1; this.x2 = x2; this.z2 = z2; this.id = id;
+        load();
+    }
 
     @Override
     public void load()
     {
         util = new Util(worldName);
         position = new Position(x, y, z);
+    }
+
+    public String getArea()
+    {
+        int xmi = Math.min(x1, x2), xma = Math.max(x1, x2), zmi = Math.min(z1, z2), zma = Math.max(z1, z2);
+        return String.format("(%d, %d)    (%d, %d)\n(%d, %d)    (%d, %d)", xmi, zma, xma, zma, xmi, zmi, xma, zmi);
     }
 
     @Override
@@ -37,18 +49,6 @@ public class SmokeDetector implements SerializableID
     public int getID()
     {
         return id;
-    }
-
-    @Override
-    public int getGroup()
-    {
-        return group;
-    }
-
-    @Override
-    public int getSystem()
-    {
-        return system;
     }
 
     @Override

@@ -13,6 +13,11 @@ public class Elements implements GetAll, AddElement, Serializable
 
     private TreeMap<Integer, SerializableID> elements;
 
+    public Elements()
+    {
+        elements = new TreeMap<>();
+    }
+
     @Override
     public Iterable<SerializableID> getAll()
     {

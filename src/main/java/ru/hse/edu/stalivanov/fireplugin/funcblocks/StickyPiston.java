@@ -3,6 +3,7 @@ package ru.hse.edu.stalivanov.fireplugin.funcblocks;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Piston;
+import org.bukkit.block.data.type.Switch;
 
 import java.io.Serial;
 
@@ -13,9 +14,15 @@ public class StickyPiston implements SerializableID
 
     private int x, y, z;
     private transient Position position;
-    private int system, group, id;
-    private String worldName;
+    private int id;
+    private String worldName = "world";
     private transient Util util;
+
+    public StickyPiston(int id, int x, int y, int z)
+    {
+        this.id = id; this.x = x; this.y = y; this.z = z;
+        load();
+    }
 
     @Override
     public void load()
@@ -37,18 +44,6 @@ public class StickyPiston implements SerializableID
     }
 
     @Override
-    public int getGroup()
-    {
-        return group;
-    }
-
-    @Override
-    public int getSystem()
-    {
-        return system;
-    }
-
-    @Override
     public ObjectTypes getType()
     {
         return ObjectTypes.stickyPiston;
@@ -56,26 +51,28 @@ public class StickyPiston implements SerializableID
 
     public void setActivated(boolean b)
     {
-
+        util.setActivated(b);
     }
 
     private class Util extends UtilBase
     {
         public Util(String worldName)
         {
-            super(worldName, x, y, z, false, Material.STICKY_PISTON);
+            super(worldName, x, y, z, false, Material.LEVER);
         }
 
         public void setActivated(boolean b)
         {
-            getPiston().setExtended(!b);
+            Switch piston = getPiston();
+            piston.setPowered(!b);
+            getBlock().setBlockData(piston);
         }
 
-        private Piston getPiston()
+        private Switch getPiston()
         {
             BlockData bd = getBlock().getBlockData();
-            if(bd instanceof Piston)
-                return (Piston) bd;
+            if(bd instanceof Switch)
+                return (Switch) bd;
             return null;
         }
     }

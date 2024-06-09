@@ -20,6 +20,7 @@ public class UtilBase
     {
         world = Bukkit.getWorld(worldName);
         allowedMaterials = new TreeSet<>(List.of(materials));
+        this.x = x; this.y = y; this.z = z;
     }
 
     public boolean checkCorrect()
